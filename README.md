@@ -45,3 +45,6 @@ the package descriptions (Nix expressions, build scripts, and so on). It also
 might not apply to patches included in Nixpkgs, which may be derivative works
 of the packages to which they apply. The aforementioned artifacts are all
 covered by the licenses of the respective packages.
+
+
+sdasdadas:
