@@ -24,6 +24,16 @@
 , libglvnd
 , mesa
 , webkitgtk
+, WebKit
+, AudioToolbox
+, AVFoundation
+, AVKit
+, Carbon
+, Cocoa
+, IOKit
+, Kernel
+, OpenGL
+, CoreFoundation
 , autoPatchelfHook
 }:
 let
@@ -46,7 +56,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     which
     doxygen
-    wxGTK.gtk
+    wxGTK
     pkg-config
   ] ++ lib.optionals stdenv.isLinux [
     autoPatchelfHook
@@ -55,19 +65,30 @@ buildPythonPackage rec {
   buildInputs = [
     wxGTK.gtk
     ncurses
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
   ] ++ lib.optionals stdenv.isLinux [
     libXinerama
     libSM
     libXxf86vm
     libXtst
     xorgproto
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
     libGLU
     libGL
     libglvnd
     mesa
     webkitgtk
+  ] ++ lib.optionals stdenv.isDarwin [
+    AudioToolbox
+    AVFoundation
+    AVKit
+    Carbon
+    Cocoa
+    CoreFoundation
+    Kernel
+    IOKit
+    OpenGL
+    WebKit
   ];
 
   propagatedBuildInputs = [ pillow numpy ];
@@ -85,7 +106,7 @@ buildPythonPackage rec {
   '';
 
   buildPhase = ''
-    ${python.interpreter} build.py -v build_wx dox etg --nodoc sip build_py
+    ${python.interpreter} build.py -v dox etg --nodoc sip build_py
   '';
 
   installPhase = ''
@@ -94,7 +115,6 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
     license = licenses.wxWindows;

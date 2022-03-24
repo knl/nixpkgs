@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
     QTKit
     AVFoundation
     AVKit
-    WebKit
   ];
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin AGL;
