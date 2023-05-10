@@ -22,6 +22,8 @@
 , Foundation
 , IOKit
 , waylandSupport ? false
+, testers
+, espanso
 }:
 let
   x11Support = !waylandSupport && stdenv.isLinux;
@@ -99,6 +101,10 @@ rustPlatform.buildRustPackage rec {
         ]
       )}
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = espanso;
+  };
 
   meta = with lib; {
     description = "Cross-platform Text Expander written in Rust";
