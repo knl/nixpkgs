@@ -4738,6 +4738,9 @@ with pkgs;
   espanso = callPackage ../applications/office/espanso {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation IOKit;
   };
+  espanso-wayland = espanso.override {
+    waylandSupport = true;
+  };
 
   esphome = callPackage ../tools/misc/esphome { };
 
