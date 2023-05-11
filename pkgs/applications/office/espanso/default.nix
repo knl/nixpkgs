@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "espanso";
-    repo = pname;
+    repo = "espanso";
     rev = "v${version}";
     hash = "sha256-5TUo5B1UZZARgTHbK2+520e3mGZkZ5tTez1qvZvMnxs=";
   };
