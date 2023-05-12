@@ -21,6 +21,7 @@
 , Cocoa
 , Foundation
 , IOKit
+, Kernel
 , waylandSupport ? false
 , testers
 , espanso
@@ -75,6 +76,7 @@ rustPlatform.buildRustPackage rec {
     Cocoa
     Foundation
     IOKit
+    Kernel
   ] ++ lib.optionals waylandSupport [
     wl-clipboard
   ] ++ lib.optionals x11Support [
