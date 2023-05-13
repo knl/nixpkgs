@@ -4741,6 +4741,7 @@ with pkgs;
   espanso-wayland = espanso.override {
     x11Support = false;
     waylandSupport = true;
+    espanso = espanso-wayland;
   };
 
   esphome = callPackage ../tools/misc/esphome { };
