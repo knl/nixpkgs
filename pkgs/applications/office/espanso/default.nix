@@ -22,6 +22,7 @@
 , Foundation
 , IOKit
 , Kernel
+, AVFoundation
 , waylandSupport ? false
 , testers
 , espanso
@@ -79,6 +80,7 @@ rustPlatform.buildRustPackage rec {
     Foundation
     IOKit
     Kernel
+    AVFoundation
   ] ++ lib.optionals waylandSupport [
     wl-clipboard
   ] ++ lib.optionals x11Support [
