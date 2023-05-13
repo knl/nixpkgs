@@ -4739,6 +4739,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation IOKit Kernel AVFoundation;
   };
   espanso-wayland = espanso.override {
+    x11Support = false;
     waylandSupport = true;
   };
 

@@ -24,12 +24,14 @@
 , Kernel
 , AVFoundation
 , waylandSupport ? false
+, x11Support ? stdenv.isLinux
 , testers
 , espanso
 }:
-let
-  x11Support = !waylandSupport && stdenv.isLinux;
-in
+# espanso does not support building with both X11 and Wayland support at the same time
+assert stdenv.isLinux -> x11Support != waylandSupport;
+assert stdenv.isDarwin -> !x11Support;
+assert stdenv.isDarwin -> !waylandSupport;
 rustPlatform.buildRustPackage rec {
   pname = "espanso";
   version = "2.1.8";
