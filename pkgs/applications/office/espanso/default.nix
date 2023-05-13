@@ -66,7 +66,9 @@ rustPlatform.buildRustPackage rec {
     "native-tls"
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = [
+    wxGTK32
+  ] ++ lib.optionals stdenv.isLinux [
     openssl
     dbus
     libnotify
