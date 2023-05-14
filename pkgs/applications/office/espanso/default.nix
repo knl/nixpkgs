@@ -23,6 +23,10 @@
 , IOKit
 , Kernel
 , AVFoundation
+, Carbon
+, QTKit
+, AVKit
+, WebKit
 , waylandSupport ? false
 , x11Support ? stdenv.isLinux
 , testers
@@ -83,6 +87,10 @@ rustPlatform.buildRustPackage rec {
     IOKit
     Kernel
     AVFoundation
+    Carbon
+    QTKit
+    AVKit
+    WebKit
   ] ++ lib.optionals waylandSupport [
     wl-clipboard
   ] ++ lib.optionals x11Support [
