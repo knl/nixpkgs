@@ -3,11 +3,14 @@
 , rustPlatform
 , pkg-config
 , extra-cmake-modules
+, expat
 , dbus
 , libX11
 , libXi
 , libXtst
+, libjpeg
 , libnotify
+, libpng
 , libxkbcommon
 , openssl
 , xclip
@@ -15,6 +18,7 @@
 , setxkbmap
 , wl-clipboard
 , wxGTK32
+, xz
 , makeWrapper
 , stdenv
 , AppKit
@@ -36,6 +40,18 @@
 assert stdenv.isLinux -> x11Support != waylandSupport;
 assert stdenv.isDarwin -> !x11Support;
 assert stdenv.isDarwin -> !waylandSupport;
+
+let
+  libs = lib.makeLibraryPath ([
+    openssl
+    expat
+    libpng
+    libjpeg
+    xz
+    wxGTK32
+  ]);
+
+in
 rustPlatform.buildRustPackage rec {
   pname = "espanso";
   version = "2.1.8";
@@ -57,6 +73,13 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = lib.optionals stdenv.isDarwin [
     ./inject-wx-on-darwin.patch
   ];
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    substituteInPlace scripts/create_bundle.sh \
+      --replace target/mac/ $out/Applications/
+
+    patchShebangs scripts/create_bundle.sh
+  '';
 
   nativeBuildInputs = [
     extra-cmake-modules
@@ -108,7 +131,7 @@ rustPlatform.buildRustPackage rec {
   # Some tests require networking
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (!stdenv.isDarwin) ''
     wrapProgram $out/bin/espanso \
       --prefix PATH : ${lib.makeBinPath (
         lib.optionals stdenv.isLinux [
@@ -120,6 +143,12 @@ rustPlatform.buildRustPackage rec {
           xclip
         ]
       )}
+  '' + lib.optionalString stdenv.isDarwin ''
+    EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
+
+    mv $out/Applications/Espanso.app/Contents/MacOS/espanso $out/Applications/Espanso.app/Contents/MacOS/.espanso
+    makeWrapper $out/Applications/Espanso.app/Contents/MacOS/.espanso $out/Applications/Espanso.app/Contents/MacOS/espanso \
+      --prefix LD_LIBRARY_PATH ":" ${libs}
   '';
 
   passthru.tests.version = testers.testVersion {
